@@ -1,7 +1,7 @@
 import styled, { createGlobalStyle } from "styled-components";
-import TtsBlock from "./components/TtsBlock";
-import SttBlock from "./components/SttBlock";
-import HomePage from "./components/HomePage";
+import TtsBlock from "./pages/TtsBlock";
+import SttBlock from "./pages/SttBlock";
+import HomePage from "./pages/HomePage";
 import { Routes, Route } from "react-router-dom";
 
 function App() {

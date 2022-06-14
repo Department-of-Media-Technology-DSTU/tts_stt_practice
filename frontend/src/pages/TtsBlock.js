@@ -1,21 +1,11 @@
 import styled from "styled-components";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import ReactPlayer from "react-player";
-
-// let socket = new WebSocket("ws://localhost:8021");
-// console.log(socket);
-// socket.onopen = function (e) {
-//   console.log("asdasd");
-//   socket.send("Меня зовут Джон");
-// };
 
 export default function TtsBlock() {
   const [text, setText] = useState();
-  const [sound, setSound] = useState();
   const [click, setClick] = useState();
-  const [url, setUrl] = useState();
   const [blob, setBlob] = useState();
 
   const handleChange = (e) => {
@@ -29,24 +19,16 @@ export default function TtsBlock() {
     setClick(true);
   };
 
-  useEffect(() => {
-    axios
-      .get("http://localhost:5000/tts/лол", { responseType: "blob" })
-      .then((c) => setBlob(c.data));
-  }, []);
-
-  console.log(blob);
   return (
-    <Wrapper>
+    <Container>
       <Header>
         <StyledLink to="/">Обратно</StyledLink>
         <p>Text to Speech</p>
       </Header>
-      <ContentWrapper>
+      <Wrapper>
         <Input onChange={handleChange}></Input>
-        <Button onClick={clickButton}>отправить</Button>
-        {/* <audio controls src="http://localhost:500/tts/лолка"></audio> */}
-      </ContentWrapper>
+        <Button onClick={clickButton}>Отправить</Button>
+      </Wrapper>
       {click && blob ? (
         <audio
           controls
@@ -54,19 +36,20 @@ export default function TtsBlock() {
           type="audio/wav"
         ></audio>
       ) : null}
-    </Wrapper>
+    </Container>
   );
 }
 
-const Wrapper = styled.div`
+const Container = styled.div`
   margin-left: 20px;
   margin-right: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  font-size: 20px;
 `;
-const ContentWrapper = styled.div`
+const Wrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;

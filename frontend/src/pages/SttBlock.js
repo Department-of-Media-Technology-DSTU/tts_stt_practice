@@ -12,15 +12,16 @@ export default function StsBlock() {
 
   const { recorderState, ...handlers } = useRecorder();
   const { audio } = recorderState;
-
+  console.log(audio);
   const handleChange = (file) => {
     setFile(file.target.files[0]);
   };
 
   const uploadFile = () => {
-    console.log(file);
+    const sending = audio ? audio : file;
+    console.log(sending);
     const formData = new FormData();
-    formData.append("file", file);
+    formData.append("file", sending);
 
     axios({
       method: "post",
@@ -28,9 +29,12 @@ export default function StsBlock() {
       data: formData,
       headers: { "Content-Type": "multipart/form-data" },
     })
-      .then((res) => setResult(res.data))
+      .then((res) => {
+        setResult(res.data);
+      })
       .catch((e) => console.log(e));
   };
+
   return (
     <Container>
       <Header>

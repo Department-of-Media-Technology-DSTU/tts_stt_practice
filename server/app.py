@@ -9,7 +9,6 @@ import array
 import wave
 import soundfile as sf
 import os
-from subprocess import Popen
 
 
 app = Flask(__name__)
@@ -17,6 +16,8 @@ cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 UPLOAD_FOLDER = os.path.join(APP_ROOT)
+file_tts = "ru_v3.pt"
+file_te = "v2_4lang_q.pt"
 
 
 def ogg_to_wav(file):
@@ -34,9 +35,7 @@ def tts(text):
   speaker = 'xenia'
   device = torch.device("cpu")
   torch.set_num_threads(2)
-  file = "ru_v3.pt"
-
-  model = torch.package.PackageImporter(file).load_pickle("tts_models", "model")
+  model = torch.package.PackageImporter(file_tts).load_pickle("tts_models", "model")
   model.to(device)
 
   def tensor_to_int16array(tensor):
@@ -56,10 +55,15 @@ def upload_file():
   ogg_to_wav('/audio.ogg ')
   sample = speech_recognition.AudioFile('sample.wav')
   r = speech_recognition.Recognizer()
+
   with sample as audio:
     audio_content = r.record(audio)
+
   res = r.recognize_google(audio_content, language="ru-RU")
   os.remove('sample.wav')
+
+  # model = torch.package.PackageImporter(file_te).load_pickle("te_model", "model")
+  # res = model.enhance_text(res, 'ru')
   print(res)
   return jsonify(res)
 

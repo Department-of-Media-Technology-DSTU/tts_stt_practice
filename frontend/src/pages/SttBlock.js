@@ -9,32 +9,48 @@ import RecordingsList from "../components/recordings-list";
 export default function StsBlock() {
   const [file, setFile] = useState(null);
   const [result, setResult] = useState("");
+  const [loader, setLoader] = useState();
 
   const { recorderState, ...handlers } = useRecorder();
-  const { audio } = recorderState;
-  console.log(audio);
+  const { audio, audioUrl } = recorderState;
+
   const handleChange = (file) => {
     setFile(file.target.files[0]);
   };
 
   const uploadFile = () => {
-    const sending = audio ? audio : file;
-    console.log(sending);
+    setLoader(true);
     const formData = new FormData();
-    formData.append("file", sending);
+    formData.append("file", file);
 
     axios({
       method: "post",
-      url: "http://localhost:5000/stt/upload",
+      url: "https://d39a-95-24-11-149.ngrok.io",
       data: formData,
-      headers: { "Content-Type": "multipart/form-data" },
     })
       .then((res) => {
+        setLoader(false);
         setResult(res.data);
       })
       .catch((e) => console.log(e));
   };
 
+  const uploadRecord = () => {
+    setLoader(true);
+    const formData = new FormData();
+    formData.append("file", audio);
+
+    axios({
+      method: "post",
+      url: "https://d39a-95-24-11-149.ngrok.io",
+      data: formData,
+    })
+      .then((res) => {
+        setLoader(false);
+        setResult(res.data);
+      })
+      .catch((e) => console.log(e));
+  };
   return (
     <Container>
       <Header>
@@ -47,17 +63,18 @@ export default function StsBlock() {
           <InputFile type="file" capture onChange={handleChange} />
           <div>
             {file ? (
-              <ButtonSend onClick={uploadFile(file)}>Преобразовать</ButtonSend>
+              <ButtonSend onClick={uploadFile}>Преобразовать</ButtonSend>
             ) : null}
           </div>
         </HandleLoaderBlock>
         <RecorderBlock>
           <p>2) запись </p>
           <RecorderControls recorderState={recorderState} handlers={handlers} />
-          <RecordingsList audio={audio} uploadFile={uploadFile} />
+          <RecordingsList audioUrl={audioUrl} uploadFile={uploadRecord} />
         </RecorderBlock>
       </Wrapper>
-      <WrapperResult>{result}</WrapperResult>
+      {loader ? <Loader>Загрузка</Loader> : null}
+      {result ? <WrapperResult>{result}</WrapperResult> : null}
     </Container>
   );
 }
@@ -89,6 +106,14 @@ const Wrapper = styled.div`
 `;
 const WrapperResult = styled.div`
   display: flex;
+  width: 600px;
+  background-color: white;
+  min-height: 200px;
+  padding: 20px;
+  justify-content: center;
+`;
+const Loader = styled.div`
+  margin: 6px;
 `;
 const Header = styled.div`
   display: flex;

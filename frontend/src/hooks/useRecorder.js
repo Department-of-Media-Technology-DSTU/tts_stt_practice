@@ -8,6 +8,7 @@ const initialState = {
   mediaStream: null,
   mediaRecorder: null,
   audio: null,
+  audioUrl: null,
 };
 
 export default function useRecorder() {
@@ -80,6 +81,7 @@ export default function useRecorder() {
             return {
               ...initialState,
               audio: blob,
+              audioUrl: window.URL.createObjectURL(blob),
             };
           else return initialState;
         });

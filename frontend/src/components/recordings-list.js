@@ -1,27 +1,27 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 
-export default function RecordingsList({ audio, uploadFile }) {
+export default function RecordingsList({ audioUrl, uploadRecord }) {
   const [recordings, setRecordings] = useState([]);
 
   useEffect(() => {
-    if (audio)
+    if (audioUrl)
       setRecordings(() => {
-        return [{ audio }];
+        return [{ audioUrl }];
       });
-  }, [audio]);
+  }, [audioUrl]);
   return (
     <RecordingsContainer>
       {recordings.length > 0 ? (
         <>
           <RecordingsLists>
             {recordings.map((record) => (
-              <Record key={record.audio}>
-                <audio controls src={record.audio} />
+              <Record key={record.audioUrl}>
+                <audio controls src={record.audioUrl} />
               </Record>
             ))}
             <div>
-              <ButtonSend onClick={uploadFile}>Преобразовать</ButtonSend>
+              <ButtonSend onClick={uploadRecord}>Преобразовать</ButtonSend>
             </div>
           </RecordingsLists>
         </>

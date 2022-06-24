@@ -3,7 +3,6 @@ import styled from "styled-components";
 
 export default function RecordingsList({ audioUrl, uploadRecord }) {
   const [recordings, setRecordings] = useState([]);
-
   useEffect(() => {
     if (audioUrl)
       setRecordings(() => {

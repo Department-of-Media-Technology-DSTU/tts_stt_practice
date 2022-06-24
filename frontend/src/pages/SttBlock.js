@@ -25,7 +25,7 @@ export default function StsBlock() {
 
     axios({
       method: "post",
-      url: "https://d39a-95-24-11-149.ngrok.io",
+      url: "http://localhost:5000/stt/upload",
       data: formData,
     })
       .then((res) => {
@@ -42,7 +42,7 @@ export default function StsBlock() {
 
     axios({
       method: "post",
-      url: "https://d39a-95-24-11-149.ngrok.io",
+      url: "http://localhost:5000/stt/upload",
       data: formData,
     })
       .then((res) => {
@@ -51,6 +51,7 @@ export default function StsBlock() {
       })
       .catch((e) => console.log(e));
   };
+
   return (
     <Container>
       <Header>
@@ -70,7 +71,7 @@ export default function StsBlock() {
         <RecorderBlock>
           <p>2) запись </p>
           <RecorderControls recorderState={recorderState} handlers={handlers} />
-          <RecordingsList audioUrl={audioUrl} uploadFile={uploadRecord} />
+          <RecordingsList audioUrl={audioUrl} uploadRecord={uploadRecord} />
         </RecorderBlock>
       </Wrapper>
       {loader ? <Loader>Загрузка</Loader> : null}

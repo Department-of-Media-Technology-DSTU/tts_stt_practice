@@ -16,7 +16,7 @@ export default function TtsBlock() {
   const clickButton = () => {
     setResult("Загрузка");
     axios
-      .get(`https://d39a-95-24-11-149.ngrok.io/tts/${text}`, {
+      .get(`http://localhost:5000/tts/${text}`, {
         responseType: "blob",
       })
       .then((c) => {

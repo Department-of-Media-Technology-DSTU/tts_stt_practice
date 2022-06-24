@@ -17,7 +17,6 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 UPLOAD_FOLDER = os.path.join(APP_ROOT)
 file_tts = "ru_v3.pt"
-file_te = "v2_4lang_q.pt"
 
 
 def ogg_to_wav(file):
@@ -60,10 +59,11 @@ def upload_file():
     audio_content = r.record(audio)
 
   res = r.recognize_google(audio_content, language="ru-RU")
-  os.remove('sample.wav')
 
-  # model = torch.package.PackageImporter(file_te).load_pickle("te_model", "model")
-  # res = model.enhance_text(res, 'ru')
+  model, example_texts, languages, punct, apply_te = torch.hub.load(repo_or_dir='snakers4/silero-models',
+                                                                  model='silero_te')
   print(res)
-  return jsonify(res)
+  res2 = apply_te(res, lan='ru')
+  os.remove('sample.wav')
+  return jsonify(res2)
 
